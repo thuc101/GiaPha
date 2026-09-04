@@ -114,7 +114,15 @@ button:hover{
   min-height:300px;
 }
 .node{
-  margin-left:calc(var(--level) * 22px);
+  margin-left:0;
+}
+/*
+  Mỗi đời chỉ thụt thêm 14px.
+  Trước đây .node dùng level * 14px trong khi node con đã nằm lồng
+  bên trong node cha, nên khoảng thụt bị cộng dồn quá nhiều.
+*/
+.node-children{
+  margin-left:14px;
 }
 .node-row{
   display:flex;
@@ -133,8 +141,8 @@ button:hover{
   outline:1px solid #b6d1ff;
 }
 .toggle{
-  flex:0 0 28px;
-  width:28px;
+  flex:0 0 22px;
+  width:22px;
   height:28px;
   min-height:28px;
   padding:0;
@@ -226,18 +234,18 @@ button:hover{
   .app{padding:10px}
   .layout{grid-template-columns:1fr}
   .detail{position:static}
-  .node{margin-left:calc(var(--level) * 14px)}
+  .node-children{margin-left:10px}
   .fields{grid-template-columns:100px minmax(0,1fr)}
 }
 @media(max-width:480px){
   h1{font-size:21px}
   .search-box{flex-basis:100%}
   .toolbar>button{flex:1 1 auto}
-  .node{margin-left:calc(var(--level) * 10px)}
+  .node-children{margin-left:7px}
   .node-name{font-size:14px}
   .fields{grid-template-columns:88px minmax(0,1fr)}
 }
-</style></head><body><div class="app"><div class="header"><h1>GIA PHẢ NGUYỄN TẤN</h1><div class="family-info"></div><div class="generated">HTML tương tác · tạo ngày: 03/09/2026 21:40:19</div><div class="toolbar"><div class="search-box"><input id="search" type="search" autocomplete="off" placeholder="Tìm tên, ngày sinh, quê quán, ghi chú..."><button id="btnClear" class="clear" type="button" title="Xóa tìm kiếm">×</button></div><button id="btnOpenAll" type="button">Mở tất cả</button><button id="btnCloseAll" type="button">Đóng tất cả</button></div><div id="count" class="status"></div></div><div class="layout"><section class="panel"><div class="panel-title">Cây gia phả</div><div id="tree" class="tree"></div></section><aside class="panel detail"><div class="panel-title">Thông tin chi tiết</div><div class="detail-body"><div id="detailEmpty" class="empty">Bấm vào một người để xem thông tin.</div><div id="detailContent" style="display:none"></div></div></aside></div><div class="footer">File HTML độc lập · dùng trên điện thoại và laptop</div></div><script>
+</style></head><body><div class="app"><div class="header"><h1>GIA PHẢ NGUYỄN TẤN</h1><div class="family-info"></div><div class="generated">HTML tương tác · tạo ngày: 04/09/2026 08:56:49</div><div class="toolbar"><div class="search-box"><input id="search" type="search" autocomplete="off" placeholder="Tìm tên, ngày sinh, quê quán, ghi chú..."><button id="btnClear" class="clear" type="button" title="Xóa tìm kiếm">×</button></div><button id="btnOpenAll" type="button">Mở tất cả</button><button id="btnCloseAll" type="button">Đóng tất cả</button></div><div id="count" class="status"></div></div><div class="layout"><section class="panel"><div class="panel-title">Cây gia phả</div><div id="tree" class="tree"></div></section><aside class="panel detail"><div class="panel-title">Thông tin chi tiết</div><div class="detail-body"><div id="detailEmpty" class="empty">Bấm vào một người để xem thông tin.</div><div id="detailContent" style="display:none"></div></div></aside></div><div class="footer">File HTML độc lập · dùng trên điện thoại và laptop</div></div><script>
 (function(){
 
 "use strict";
@@ -591,6 +599,7 @@ function renderNode(node,path,level,parent){
 
   if(children.length && expanded){
     var childBox=document.createElement("div");
+    childBox.className="node-children";
 
     children.forEach(function(child,i){
       visible+=renderNode(
