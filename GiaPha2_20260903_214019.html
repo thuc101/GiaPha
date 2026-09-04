@@ -1,0 +1,676 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>GIA PHẢ NGUYỄN TẤN</title><style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Times New Roman",Times,serif;
+  background:#f4f6f9;
+  color:#20242a;
+}
+.app{
+  max-width:1280px;
+  margin:auto;
+  padding:16px;
+}
+.header,.panel{
+  background:#fff;
+  border:1px solid #d9dee5;
+  border-radius:10px;
+}
+.header{
+  padding:16px;
+  margin-bottom:14px;
+}
+h1{
+  margin:0;
+  text-align:center;
+  font-size:30px;
+  font-weight:700;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+.generated{
+  margin-top:6px;
+  text-align:center;
+  color:#777;
+  font-size:13px;
+}
+.family-info{
+  margin:12px auto 0;
+  max-width:820px;
+  padding:9px 12px;
+  border-top:1px solid #e3e3e3;
+  border-bottom:1px solid #e3e3e3;
+  text-align:center;
+  font-size:15px;
+  line-height:1.55;
+}
+.family-info:empty{
+  display:none;
+}
+.family-note{
+  margin-top:3px;
+  white-space:pre-wrap;
+}
+.toolbar{
+  margin-top:14px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.search-box{
+  display:flex;
+  gap:6px;
+  flex:1 1 320px;
+}
+input{
+  font-family:inherit;
+  width:100%;
+  min-width:0;
+  height:38px;
+  padding:0 11px;
+  font-size:15px;
+  border:1px solid #bfc6ce;
+  border-radius:7px;
+}
+button{
+  font-family:inherit;
+  min-height:38px;
+  padding:7px 11px;
+  border:1px solid #b9c0c8;
+  border-radius:7px;
+  background:#fff;
+  cursor:pointer;
+}
+button:hover{
+  background:#f1f3f5;
+}
+.clear{
+  flex:0 0 38px;
+  width:38px;
+  padding:0;
+}
+.status{
+  margin-top:9px;
+  font-size:13px;
+  color:#777;
+}
+.layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 360px;
+  gap:14px;
+  align-items:start;
+}
+.panel{
+  overflow:hidden;
+}
+.panel-title{
+  padding:11px 14px;
+  font-weight:bold;
+  background:#f7f8fa;
+  border-bottom:1px solid #d9dee5;
+}
+.tree{
+  padding:8px 8px 18px;
+  min-height:300px;
+}
+.node{
+  margin-left:calc(var(--level) * 22px);
+}
+.node-row{
+  display:flex;
+  gap:5px;
+  align-items:flex-start;
+  min-height:38px;
+  padding:5px 7px;
+  border-radius:7px;
+  cursor:pointer;
+}
+.node-row:hover{
+  background:#f6f8fb;
+}
+.node-row.active{
+  background:#eef4ff;
+  outline:1px solid #b6d1ff;
+}
+.toggle{
+  flex:0 0 28px;
+  width:28px;
+  height:28px;
+  min-height:28px;
+  padding:0;
+  border:0;
+  background:transparent;
+  font-size:17px;
+}
+.node-main{
+  flex:1 1 auto;
+  min-width:0;
+}
+.node-name{
+  font-size:16px;
+  font-weight:600;
+  line-height:1.45;
+  word-break:break-word;
+}
+.stt{
+  margin-right:5px;
+  color:#666;
+  font-weight:normal;
+}
+.node-meta{
+  margin-top:2px;
+  display:flex;
+  gap:5px 12px;
+  flex-wrap:wrap;
+  font-size:12px;
+  color:#777;
+}
+.detail{
+  position:sticky;
+  top:12px;
+}
+.detail-body{
+  padding:14px;
+}
+.person-name{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+.person-image{
+  width:100%;
+  max-height:320px;
+  object-fit:contain;
+  border:1px solid #ddd;
+  border-radius:8px;
+  margin-bottom:12px;
+}
+.fields{
+  display:grid;
+  grid-template-columns:118px minmax(0,1fr);
+  border-left:1px solid #ddd;
+  border-top:1px solid #ddd;
+}
+.field-label,.field-value{
+  padding:8px;
+  border-right:1px solid #ddd;
+  border-bottom:1px solid #ddd;
+  min-width:0;
+}
+.field-label{
+  background:#f7f8fa;
+  font-size:12px;
+  font-weight:bold;
+}
+.field-value{
+  font-size:14px;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.empty{
+  color:#777;
+  line-height:1.55;
+}
+.no-result{
+  padding:35px 15px;
+  text-align:center;
+  color:#777;
+}
+.footer{
+  padding:15px 4px 2px;
+  text-align:center;
+  color:#999;
+  font-size:11px;
+}
+@media(max-width:820px){
+  .app{padding:10px}
+  .layout{grid-template-columns:1fr}
+  .detail{position:static}
+  .node{margin-left:calc(var(--level) * 14px)}
+  .fields{grid-template-columns:100px minmax(0,1fr)}
+}
+@media(max-width:480px){
+  h1{font-size:21px}
+  .search-box{flex-basis:100%}
+  .toolbar>button{flex:1 1 auto}
+  .node{margin-left:calc(var(--level) * 10px)}
+  .node-name{font-size:14px}
+  .fields{grid-template-columns:88px minmax(0,1fr)}
+}
+</style></head><body><div class="app"><div class="header"><h1>GIA PHẢ NGUYỄN TẤN</h1><div class="family-info"></div><div class="generated">HTML tương tác · tạo ngày: 03/09/2026 21:40:19</div><div class="toolbar"><div class="search-box"><input id="search" type="search" autocomplete="off" placeholder="Tìm tên, ngày sinh, quê quán, ghi chú..."><button id="btnClear" class="clear" type="button" title="Xóa tìm kiếm">×</button></div><button id="btnOpenAll" type="button">Mở tất cả</button><button id="btnCloseAll" type="button">Đóng tất cả</button></div><div id="count" class="status"></div></div><div class="layout"><section class="panel"><div class="panel-title">Cây gia phả</div><div id="tree" class="tree"></div></section><aside class="panel detail"><div class="panel-title">Thông tin chi tiết</div><div class="detail-body"><div id="detailEmpty" class="empty">Bấm vào một người để xem thông tin.</div><div id="detailContent" style="display:none"></div></div></aside></div><div class="footer">File HTML độc lập · dùng trên điện thoại và laptop</div></div><script>
+(function(){
+
+"use strict";
+
+var DATA=[{"Id":139,"STT":1,"Ten":"Ông Cao Cao Cao","NgaySinh":null,"MoTa":"","Pid":0,"children":[{"Id":131,"STT":1,"Ten":"Nguyễn Tấn Phó (Nguyễn Tấn Đốc) (Ông Cao Cao)","NgaySinh":null,"MoTa":" - Đốc học - Vạn Tượng - đỗ Cử nhân khoa Mậu Thìn 1868;\nÔng Nguyễn Tấn Phó (Đốc học) Đậu Cử Nhân khoá 1868, Bổ Đốc học, \nthăng Tham Biện Sơn Phòng","Pid":139,"children":[{"Id":170,"STT":1,"Ten":"Nguyễn Tấn Tài, Vợ là bà Đặng Thị Nỡ (Ông Cao)","NgaySinh":null,"MoTa":"Bà Đặng Thi Nỡ quê Lưu Thuỷ (Ngoài Chợ Sa)\nÔng làm nghề thuốc bắc, Thầy Địa lý, ","Pid":131,"children":[{"Id":129,"STT":1,"Ten":"Nguyễn Tấn Khuyến (Ông Cố)","NgaySinh":null,"MoTa":"Sanh Đinh sửu niên (1877)\nChết : Canh Ngọ niên (1930)\nchết ngày 2/6, hưởng thọ 54 tuổi.\nVợ là : Bà Đỗ Thị Doãn, Sanh : Canh Thìn, 1880;\nChết ngày 7.1 năm Nhâm Ngọ,(1942) Hưởng thọ 61 tuổi;\n\nTôi (Nguyễn Tấn Giai) gọi là Ông nội;\nDáng người nho nhã, cuộc sống thanh bần, rất mục hiền lành, Suốt cả cuộc đời\nkhông hề mắc lòng với một ai\nHằng ngày, chăm lo múc nước tưới cây trong vườn, rong gai, kiếm củi, lo dạy con cái.\nCuộc đời bình thản, lặng lờ trôi, nghe tin ông mất, người ta nói :\"Thôi rồi! Ông Phật đó, ổng mất rồi!\"\nỔng mất đi, để lại cho con cháu một gia tài lớn lao, đó là 2 chữ \"Hiền Đức\"","Pid":170,"children":[{"Id":122,"STT":1,"Ten":"Ông Nội (Nguyễn Tấn Toàn) 1905 21/11/ất ty (16/12/1905)","NgaySinh":null,"MoTa":null,"Pid":129,"children":[{"Id":132,"STT":1,"Ten":"Bác Bỗng","NgaySinh":null,"MoTa":null,"Pid":122,"children":[{"Id":133,"STT":1,"Ten":"Chi Nhiên","NgaySinh":null,"MoTa":null,"Pid":132,"children":[]},{"Id":134,"STT":2,"Ten":"Anh Thắng","NgaySinh":null,"MoTa":null,"Pid":132,"children":[]}]},{"Id":140,"STT":2,"Ten":"Bác Bốn","NgaySinh":null,"MoTa":null,"Pid":122,"children":[{"Id":143,"STT":1,"Ten":"Anh Tuấn","NgaySinh":null,"MoTa":null,"Pid":140,"children":[]}]},{"Id":121,"STT":3,"Ten":"Chú Sáu","NgaySinh":null,"MoTa":null,"Pid":122,"children":[{"Id":123,"STT":1,"Ten":"Thương","NgaySinh":null,"MoTa":null,"Pid":121,"children":[]},{"Id":124,"STT":2,"Ten":"Thế","NgaySinh":null,"MoTa":null,"Pid":121,"children":[]},{"Id":125,"STT":3,"Ten":"Thi","NgaySinh":null,"MoTa":null,"Pid":121,"children":[]},{"Id":126,"STT":4,"Ten":"Thuấn","NgaySinh":null,"MoTa":null,"Pid":121,"children":[]},{"Id":127,"STT":5,"Ten":"Thơ","NgaySinh":null,"MoTa":null,"Pid":121,"children":[]}]},{"Id":119,"STT":4,"Ten":"Nguyễn Tấn Vỵ (Ba) - 1936 - Bùi Thị Thống ","NgaySinh":null,"MoTa":null,"Pid":122,"children":[{"Id":120,"STT":1,"Ten":"Nguyễn Tấn Trí - Nguyên Minh ","NgaySinh":null,"MoTa":null,"Pid":119,"children":[{"Id":151,"STT":1,"Ten":"Nguyễn Tường Vi (TiTi)","NgaySinh":null,"MoTa":null,"Pid":120,"children":[]},{"Id":152,"STT":2,"Ten":"Nguyễn Tấn Quang (Bo)","NgaySinh":null,"MoTa":null,"Pid":120,"children":[]}]},{"Id":116,"STT":2,"Ten":"Nguyễn Tấn Thức - Nguyên Minh 2 (01/01/1968) Đặng Thị Mỹ Lài - Diệu Mỹ - 1978","NgaySinh":null,"MoTa":null,"Pid":119,"children":[{"Id":117,"STT":1,"Ten":"Nguyễn Đặng Phương Uyên (TiNi)  Nguyên Niệm 01/09/2001","NgaySinh":null,"MoTa":null,"Pid":116,"children":[]},{"Id":118,"STT":2,"Ten":"Nguyễn Đặng Trúc Quỳnh XuKa 01/09/2006 Nguyên Như","NgaySinh":null,"MoTa":null,"Pid":116,"children":[]}]},{"Id":153,"STT":3,"Ten":"Nguyễn Tấn Vũ - 1970 - ","NgaySinh":null,"MoTa":null,"Pid":119,"children":[{"Id":155,"STT":1,"Ten":"Mi mèo","NgaySinh":null,"MoTa":null,"Pid":153,"children":[]}]},{"Id":154,"STT":4,"Ten":"Trang","NgaySinh":null,"MoTa":null,"Pid":119,"children":[{"Id":156,"STT":1,"Ten":"Hiếu","NgaySinh":null,"MoTa":null,"Pid":154,"children":[]}]},{"Id":157,"STT":5,"Ten":"Hạnh","NgaySinh":null,"MoTa":null,"Pid":119,"children":[{"Id":161,"STT":1,"Ten":"Bé Thư","NgaySinh":null,"MoTa":null,"Pid":157,"children":[]}]},{"Id":158,"STT":6,"Ten":"Hiền","NgaySinh":null,"MoTa":null,"Pid":119,"children":[{"Id":162,"STT":1,"Ten":"Bi","NgaySinh":null,"MoTa":null,"Pid":158,"children":[]}]},{"Id":159,"STT":7,"Ten":"Quyên","NgaySinh":null,"MoTa":null,"Pid":119,"children":[{"Id":163,"STT":1,"Ten":"LaVi","NgaySinh":null,"MoTa":null,"Pid":159,"children":[]}]},{"Id":160,"STT":8,"Ten":"Huy","NgaySinh":null,"MoTa":null,"Pid":119,"children":[{"Id":164,"STT":1,"Ten":"LiNa","NgaySinh":null,"MoTa":null,"Pid":160,"children":[]}]}]},{"Id":141,"STT":5,"Ten":"Cô Thu","NgaySinh":null,"MoTa":null,"Pid":122,"children":[{"Id":144,"STT":1,"Ten":"Tuyền","NgaySinh":null,"MoTa":null,"Pid":141,"children":[]}]},{"Id":142,"STT":6,"Ten":"Chú Sử","NgaySinh":null,"MoTa":null,"Pid":122,"children":[{"Id":145,"STT":1,"Ten":"Hoà","NgaySinh":null,"MoTa":null,"Pid":142,"children":[]}]}]},{"Id":167,"STT":2,"Ten":"Bà Giáo","NgaySinh":null,"MoTa":null,"Pid":129,"children":[]},{"Id":130,"STT":3,"Ten":"Bà Quyền","NgaySinh":null,"MoTa":null,"Pid":129,"children":[{"Id":146,"STT":1,"Ten":"Cô Cẩm","NgaySinh":null,"MoTa":null,"Pid":130,"children":[{"Id":168,"STT":1,"Ten":"Vinh Bs","NgaySinh":null,"MoTa":null,"Pid":146,"children":[]}]}]},{"Id":135,"STT":4,"Ten":"Bà Thành (Nguyễn Thị Loan)","NgaySinh":null,"MoTa":null,"Pid":129,"children":[{"Id":138,"STT":1,"Ten":"Chú Nguyện","NgaySinh":null,"MoTa":null,"Pid":135,"children":[{"Id":169,"STT":0,"Ten":"Bé Vân","NgaySinh":null,"MoTa":null,"Pid":138,"children":[]}]},{"Id":137,"STT":2,"Ten":"Chú Dũng","NgaySinh":null,"MoTa":null,"Pid":135,"children":[]},{"Id":136,"STT":3,"Ten":"Chú Dung","NgaySinh":null,"MoTa":null,"Pid":135,"children":[]}]},{"Id":148,"STT":5,"Ten":"Bà Bảy","NgaySinh":null,"MoTa":null,"Pid":129,"children":[{"Id":166,"STT":1,"Ten":"Chú Minh","NgaySinh":null,"MoTa":null,"Pid":148,"children":[{"Id":165,"STT":1,"Ten":"Quýt Tàu","NgaySinh":null,"MoTa":null,"Pid":166,"children":[]}]}]}]}]},{"Id":178,"STT":1,"Ten":"Ông Tỵ","NgaySinh":null,"MoTa":"","Pid":131,"children":[]},{"Id":179,"STT":3,"Ten":"Nguyễn Lợi (Ông Cống)","NgaySinh":null,"MoTa":"","Pid":131,"children":[]},{"Id":180,"STT":4,"Ten":"Nguyễn May ( Ông Viên)","NgaySinh":null,"MoTa":"","Pid":131,"children":[]},{"Id":181,"STT":5,"Ten":"Ông Dần","NgaySinh":null,"MoTa":"","Pid":131,"children":[]}]},{"Id":147,"STT":2,"Ten":"Nguyễn Duy Cung - Án sát Bình định ( 1839–1885) - Chú Tụ","NgaySinh":null,"MoTa":"Ông Nguyễn Duy Cung, Đậu Cử nhân khoa 1868, Bổ Tham biện Sơn Phòng, Thăng Án sát Bình Định, Bình Định mất, Ông Chống Pháp, làm bài hịch bằng máu, kêu gọi toàn dân chống Pháp.","Pid":139,"children":[]},{"Id":171,"STT":3,"Ten":"Nguyễn Duy Trinh (Ông Cao Thầy Quyền)","NgaySinh":null,"MoTa":"Ông Nguyễn Duy Trinh, học giỏi, đậu cử nh6n, nhưng không được cho đậu, về nhà tuyệt thực đến chết, (Bởi luật lệ hồi bấy giờ, 3 anh em trong một nhà, không được đậu cùng khoa trong một năm)","Pid":139,"children":[{"Id":185,"STT":1,"Ten":"Ông Cao","NgaySinh":null,"MoTa":"","Pid":171,"children":[{"Id":184,"STT":1,"Ten":"Ông Cố","NgaySinh":null,"MoTa":"","Pid":185,"children":[{"Id":182,"STT":1,"Ten":"Ông Quyền Kính - Bà Quyền Kính (a/e với ông Nội)","NgaySinh":null,"MoTa":"","Pid":184,"children":[{"Id":183,"STT":1,"Ten":"Nguyễn Đức Quyền","NgaySinh":null,"MoTa":"Thầy dạy Văn Trần Quốc Tuấn (Dạy Trí Thức Vũ)","Pid":182,"children":[]}]}]}]}]},{"Id":172,"STT":4,"Ten":"Ông Hương Đồng","NgaySinh":null,"MoTa":"Ngoài ra Ông Cụ Cao có một vợ hầu, sau sinh được một người con trai, tục gọi ông Hương Đồng;\n- Một bà con gái có chồng về phái Trần, sinh hạ ra Cháu nội là Ông Xã Tiệm\n- Một Bà con gái, có chồng về Long Phụng, Phái Lê, còn là Lê Quang Trang, ( Gọi Hương Bộ Trang)\n- Một bà có chồng về Phái Lương (Không con)\n","Pid":139,"children":[]},{"Id":173,"STT":5,"Ten":"Bà Thứ Nhất","NgaySinh":null,"MoTa":"","Pid":139,"children":[{"Id":176,"STT":1,"Ten":"Con Bà Nhất","NgaySinh":null,"MoTa":"","Pid":173,"children":[{"Id":177,"STT":1,"Ten":"Ông Xã Tiệm","NgaySinh":null,"MoTa":"","Pid":176,"children":[]}]}]},{"Id":174,"STT":6,"Ten":"Bà Thứ Hai - Chồng là Lê Quang Trang","NgaySinh":null,"MoTa":"","Pid":139,"children":[]},{"Id":175,"STT":7,"Ten":"Bà Thứ Ba","NgaySinh":null,"MoTa":"","Pid":139,"children":[]}]}];
+var open={};
+var query="";
+var selectedKey=null;
+
+var tree=document.getElementById("tree");
+var search=document.getElementById("search");
+var count=document.getElementById("count");
+var detailEmpty=document.getElementById("detailEmpty");
+var detailContent=document.getElementById("detailContent");
+
+var labels={
+  Id:"Id",
+  STT:"STT",
+  Ten:"Tên",
+  HoTen:"Họ tên",
+  NgaySinh:"Ngày sinh",
+  NgayMat:"Ngày mất",
+  GioiTinh:"Giới tính",
+  QueQuan:"Quê quán",
+  NoiSinh:"Nơi sinh",
+  NoiO:"Nơi ở",
+  DiaChi:"Địa chỉ",
+  DienThoai:"Điện thoại",
+  Email:"Email",
+  MoTa:"Ghi chú",
+  GhiChu:"Ghi chú",
+  Pid:"Pid",
+  ChaId:"Cha Id",
+  MeId:"Mẹ Id",
+  Anh:"Ảnh",
+  Hinh:"Ảnh",
+  HinhAnh:"Ảnh",
+  Avatar:"Ảnh",
+  Photo:"Ảnh",
+  Image:"Ảnh",
+  ImageUrl:"Ảnh",
+  AnhUrl:"Ảnh"
+};
+
+function norm(v){
+  var s=String(v==null?"":v).toLowerCase().replace(/đ/g,"d");
+  if(s.normalize){
+    s=s.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  }
+  return s;
+}
+
+function keyOf(node,path){
+  if(node && node.Id!==null && node.Id!==undefined && node.Id!==""){
+    return "id:"+node.Id;
+  }
+  return "path:"+path.join(".");
+}
+
+function empty(v){
+  return v===null || v===undefined || v==="";
+}
+
+function internalField(k){
+  return k==="children" || k.charAt(0)==="_";
+}
+
+function textValue(v){
+  if(v==null)return "";
+  if(typeof v==="object"){
+    try{return JSON.stringify(v)}catch(e){return String(v)}
+  }
+  return String(v);
+}
+
+function fmtDate(v){
+  if(empty(v))return "";
+
+  var s=String(v).trim();
+
+  // yyyy-MM-dd hoặc yyyy-MM-ddTHH:mm:ss
+  if(
+    s.length>=10 &&
+    s.charAt(4)==="-" &&
+    s.charAt(7)==="-"
+  ){
+    return (
+      s.substring(8,10)+
+      "/"+
+      s.substring(5,7)+
+      "/"+
+      s.substring(0,4)
+    );
+  }
+
+  // dd/MM/yyyy: giữ nguyên nếu dữ liệu đã đúng dạng Việt Nam.
+  if(
+    s.length>=10 &&
+    s.charAt(2)==="/" &&
+    s.charAt(5)==="/"
+  ){
+    return s.substring(0,10);
+  }
+
+  return s;
+}
+
+function fmtField(k,v){
+  var nk=norm(k);
+  if(nk.indexOf("ngay")>=0 || nk.indexOf("date")>=0){
+    return fmtDate(v);
+  }
+  return textValue(v);
+}
+
+function nameOf(node){
+  var a=["Ten","HoTen","Name","FullName"];
+  for(var i=0;i<a.length;i++){
+    if(!empty(node[a[i]]))return String(node[a[i]]);
+  }
+  return "Thành viên"+(!empty(node.Id)?" "+node.Id:"");
+}
+
+function field(node,names){
+  var keys=Object.keys(node||{});
+  for(var i=0;i<names.length;i++){
+    var n=norm(names[i]);
+    for(var j=0;j<keys.length;j++){
+      if(norm(keys[j])===n && !empty(node[keys[j]])){
+        return node[keys[j]];
+      }
+    }
+  }
+  return "";
+}
+
+function birthOf(node){
+  return field(node,["NgaySinh","NgàySinh","BirthDate","DateOfBirth"]);
+}
+
+function homeOf(node){
+  return field(node,["QueQuan","QuêQuán","Que","NoiSinh","NguyenQuan"]);
+}
+
+function imageOf(node){
+  var keys=Object.keys(node||{});
+  for(var i=0;i<keys.length;i++){
+    var k=norm(keys[i]);
+    var v=node[keys[i]];
+    if(empty(v))continue;
+
+    var ks=
+      k==="anh" ||
+      k==="hinh" ||
+      k==="hinhanh" ||
+      k==="avatar" ||
+      k==="photo" ||
+      k==="image" ||
+      k==="imageurl" ||
+      k==="anhurl" ||
+      k.indexOf("image")>=0 ||
+      k.indexOf("avatar")>=0;
+
+    var s=String(v);
+    var vs=
+      s.indexOf("data:image/")===0 ||
+      s.indexOf("https://")===0 ||
+      s.indexOf("http://")===0;
+
+    if(ks && vs)return s;
+  }
+  return "";
+}
+
+function searchText(node){
+  var p=[];
+  Object.keys(node||{}).forEach(function(k){
+    if(internalField(k))return;
+    if(!empty(node[k]))p.push(textValue(node[k]));
+  });
+  return norm(p.join(" "));
+}
+
+function selfMatch(node){
+  if(!query)return true;
+  return searchText(node).indexOf(query)>=0;
+}
+
+function subtreeMatch(node){
+  if(!query)return true;
+  if(selfMatch(node))return true;
+  var c=node.children||[];
+  for(var i=0;i<c.length;i++){
+    if(subtreeMatch(c[i]))return true;
+  }
+  return false;
+}
+
+function walk(nodes,fn,path){
+  path=path||[];
+  (nodes||[]).forEach(function(node,i){
+    var p=path.concat(i);
+    fn(node,p);
+    walk(node.children||[],fn,p);
+  });
+}
+
+function totalCount(nodes){
+  var n=0;
+  walk(nodes,function(){n++});
+  return n;
+}
+
+function openRoots(){
+  (DATA||[]).forEach(function(node,i){
+    open[keyOf(node,[i])]=true;
+  });
+}
+
+function clear(el){
+  while(el.firstChild)el.removeChild(el.firstChild);
+}
+
+function addText(parent,tag,cls,value){
+  var el=document.createElement(tag);
+  if(cls)el.className=cls;
+  el.textContent=value;
+  parent.appendChild(el);
+  return el;
+}
+
+function showDetail(node,k){
+  selectedKey=k;
+  detailEmpty.style.display="none";
+  detailContent.style.display="block";
+  clear(detailContent);
+
+  addText(detailContent,"div","person-name",nameOf(node));
+
+  var image=imageOf(node);
+  if(image){
+    var img=document.createElement("img");
+    img.className="person-image";
+    img.alt=nameOf(node);
+    img.src=image;
+    detailContent.appendChild(img);
+  }
+
+  var fields=document.createElement("div");
+  fields.className="fields";
+
+  Object.keys(node||{}).forEach(function(f){
+    if(internalField(f) || empty(node[f]))return;
+    addText(fields,"div","field-label",labels[f]||f);
+    addText(fields,"div","field-value",fmtField(f,node[f]));
+  });
+
+  detailContent.appendChild(fields);
+  markSelected();
+}
+
+function markSelected(){
+  var rows=document.querySelectorAll(".node-row");
+  for(var i=0;i<rows.length;i++){
+    if(rows[i].getAttribute("data-key")===selectedKey){
+      rows[i].classList.add("active");
+    }else{
+      rows[i].classList.remove("active");
+    }
+  }
+}
+
+function meta(node,main){
+  var b=birthOf(node);
+  var h=homeOf(node);
+  if(empty(b) && empty(h))return;
+
+  var m=document.createElement("div");
+  m.className="node-meta";
+
+  if(!empty(b))addText(m,"span","","Sinh: "+fmtDate(b));
+  if(!empty(h))addText(m,"span","","Quê: "+String(h));
+
+  main.appendChild(m);
+}
+
+function renderNode(node,path,level,parent){
+  if(query && !subtreeMatch(node))return 0;
+
+  var k=keyOf(node,path);
+  var children=node.children||[];
+  var expanded=query ? true : !!open[k];
+
+  var box=document.createElement("div");
+  box.className="node";
+  box.style.setProperty("--level",level);
+
+  var row=document.createElement("div");
+  row.className="node-row";
+  row.setAttribute("data-key",k);
+
+  var toggle=document.createElement("button");
+  toggle.type="button";
+  toggle.className="toggle";
+
+  if(children.length){
+    toggle.textContent=expanded?"▾":"▸";
+    toggle.title=expanded?"Đóng nhánh":"Mở nhánh";
+    toggle.onclick=function(e){
+      e.stopPropagation();
+
+      if(query){
+        query="";
+        search.value="";
+      }
+
+      open[k]=!open[k];
+      render();
+    };
+  }else{
+    toggle.textContent="•";
+    toggle.disabled=true;
+    toggle.style.cursor="default";
+  }
+
+  row.appendChild(toggle);
+
+  var main=document.createElement("div");
+  main.className="node-main";
+
+  var name=document.createElement("div");
+  name.className="node-name";
+
+  if(!empty(node.STT)){
+    addText(name,"span","stt",String(node.STT)+".");
+  }
+
+  addText(name,"span","",nameOf(node));
+  main.appendChild(name);
+  meta(node,main);
+
+  row.appendChild(main);
+
+  row.onclick=function(){
+    showDetail(node,k);
+  };
+
+  box.appendChild(row);
+
+  var visible=1;
+
+  if(children.length && expanded){
+    var childBox=document.createElement("div");
+
+    children.forEach(function(child,i){
+      visible+=renderNode(
+        child,
+        path.concat(i),
+        level+1,
+        childBox
+      );
+    });
+
+    if(childBox.childNodes.length){
+      box.appendChild(childBox);
+    }
+  }
+
+  parent.appendChild(box);
+  return visible;
+}
+
+function render(){
+  clear(tree);
+
+  var visible=0;
+
+  (DATA||[]).forEach(function(node,i){
+    visible+=renderNode(node,[i],0,tree);
+  });
+
+  var total=totalCount(DATA);
+
+  if(!tree.childNodes.length){
+    addText(tree,"div","no-result","Không tìm thấy người phù hợp.");
+  }
+
+  count.textContent=
+    query
+      ? "Đang hiển thị "+visible+" / "+total+" người"
+      : "Tổng cộng "+total+" người";
+
+  markSelected();
+}
+
+search.oninput=function(){
+  query=norm(search.value.trim());
+  render();
+};
+
+document.getElementById("btnClear").onclick=function(){
+  search.value="";
+  query="";
+  search.focus();
+  render();
+};
+
+document.getElementById("btnOpenAll").onclick=function(){
+  search.value="";
+  query="";
+
+  walk(DATA,function(node,path){
+    if(node.children && node.children.length){
+      open[keyOf(node,path)]=true;
+    }
+  });
+
+  render();
+};
+
+document.getElementById("btnCloseAll").onclick=function(){
+  search.value="";
+  query="";
+  open={};
+  render();
+};
+
+openRoots();
+render();
+
+if(DATA && DATA.length){
+  showDetail(DATA[0],keyOf(DATA[0],[0]));
+}
+
+})();
+</script></body></html>
